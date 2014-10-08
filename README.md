@@ -4,12 +4,15 @@
 [![License](https://img.shields.io/cocoapods/l/AKUAssetManager.svg?style=flat)](http://cocoadocs.org/docsets/AKUAssetManager)
 [![Platform](https://img.shields.io/cocoapods/p/AKUAssetManager.svg?style=flat)](http://cocoadocs.org/docsets/AKUAssetManager)
 
+Easy to check authorizationStatus of Camera/Photo.
+
 if not allow to access camera or photo, this library show warning alert.
 
 ![screenshot](http://monosnap.com/image/EogZjR69i2R0GwSs4zKCR8CAEeFfS4.png)
 
 ## Feature
 
+- Easy to check authorizationStatus of Camera/Photo.
 - iPad support
 - Jump to app's config directly (iOS8〜)
 
