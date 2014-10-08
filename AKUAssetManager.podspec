@@ -9,13 +9,12 @@
 
 Pod::Spec.new do |s|
   s.name             = "AKUAssetManager"
-  s.version          = "0.1.1"
-  s.summary          = "A short description of AKUAssetManager."
+  s.version          = "0.1.2"
+  s.summary          = "Easy to check authorizationStatus of Camera/Photo."
   s.description      = <<-DESC
-                       An optional longer description of AKUAssetManager
+                       Easy to check authorizationStatus of Camera/Photo.
 
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       if not allow to access camera or photo, this library show warning alert.
                        DESC
   s.homepage         = "https://github.com/akuraru/AKUAssetManager"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
