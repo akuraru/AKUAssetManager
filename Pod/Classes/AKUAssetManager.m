@@ -17,7 +17,7 @@
     return [ALAssetsLibrary authorizationStatus];
 }
 
-+ (void)askForPermission:(void (^)(ALAuthorizationStatus))complete {
++ (void)askForPermission:(void (^)(ALAuthorizationStatus)) complete {
     ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
     if (status == ALAuthorizationStatusNotDetermined) {
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
@@ -38,22 +38,22 @@
     }
 }
 
-+ (NSString *)stringForStatus:(ALAuthorizationStatus)status {
++ (NSString *)stringForStatus:(ALAuthorizationStatus) status {
     switch (status) {
         case ALAuthorizationStatusNotDetermined:
-            return @"まだ許可ダイアログ出たことない";
+            return @"写真へのアクセスダイアログ出たことない";
         case ALAuthorizationStatusRestricted:
-            return @"機能制限(ペアレンタルコントロール)で許可されてない";
-        case ALAuthorizationStatusDenied:
-            if ([self iosVersionOver8]) {
-                return @"許可ダイアログで\"いいえ\"が押されています\n"
-                        "設定アプリ -> アプリ -> 写真を音にする必要があります。";
-            } else {
-                return @"許可ダイアログで\"いいえ\"が押されています\n"
-                        "設定アプリ -> プライバシー -> 写真 -> 該当アプリを\"オン\"する必要があります";
-            }
+            return @"機能制限(ペアレンタルコントロール)で許可されていません";
+        case ALAuthorizationStatusDenied: {
+            NSString *appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+            return [NSString stringWithFormat:@"写真へのアクセスが許可されていません。\n"
+                                                  "設定アプリ → プライバシー → 写真 → %@ を許可してください。",
+                                              appName];
+
+        }
         case ALAuthorizationStatusAuthorized:
             return @"写真へのアクセスが許可されています";
     }
+    return nil;
 }
 @end

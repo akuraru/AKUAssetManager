@@ -14,7 +14,7 @@
     return [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
 }
 
-+ (void)askForPermission:(void (^)(AVAuthorizationStatus))complete {
++ (void)askForPermission:(void (^)(AVAuthorizationStatus)) complete {
     AVAuthorizationStatus status = [self status];
     if (status == AVAuthorizationStatusNotDetermined) {
         __weak typeof(self) this = self;
@@ -28,22 +28,21 @@
     }
 }
 
-+ (NSString *)stringForStatus:(AVAuthorizationStatus)status {
++ (NSString *)stringForStatus:(AVAuthorizationStatus) status {
     switch (status) {
         case AVAuthorizationStatusNotDetermined:
-            return @"まだ許可ダイアログ出たことない";
+            return @"カメラへのアクセスダイアログ出たことない";
         case AVAuthorizationStatusRestricted:
-            return @"機能制限(ペアレンタルコントロール)で許可されてない";
-        case AVAuthorizationStatusDenied:
-            if ([self iosVersionOver8]) {
-                return @"許可ダイアログで\"いいえ\"が押されています\n"
-                        "設定アプリ -> アプリ -> カメラをオンにする必要があります。";
-            } else {
-                return @"許可ダイアログで\"いいえ\"が押されています\n"
-                        "設定アプリ -> プライバシー -> カメラ -> 該当アプリを\"オン\"する必要があります";
-            }
+            return @"機能制限(ペアレンタルコントロール)によりカメラへのアクセスが許可されていません。";
+        case AVAuthorizationStatusDenied:{
+            NSString *appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+            return [NSString stringWithFormat:@"カメラへのアクセスが許可されていません。\n"
+                                                  "設定アプリ → プライバシー → カメラ → %@ を許可してください。",
+                                              appName];
+        }
         case AVAuthorizationStatusAuthorized:
             return @"カメラへのアクセスが許可されています";
     }
+    return nil;
 }
 @end
