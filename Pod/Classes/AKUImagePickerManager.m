@@ -12,6 +12,10 @@
 #import "CCAlertView.h"
 #import "AKUCaptureManager.h"
 
+@interface AKUImagePickerManager ()
+@property(nonatomic, strong) UIImagePickerController *imagePickerController;
+@end
+
 @implementation AKUImagePickerManager {
     UIPopoverController *imagePopController;
 }
@@ -32,10 +36,10 @@
 }
 
 - (void)openCamera:(__weak id)this {
-    UIImagePickerController *imagePickerCtrl = [[UIImagePickerController alloc] init];
-    [imagePickerCtrl setDelegate:this];
-    imagePickerCtrl.sourceType = UIImagePickerControllerSourceTypeCamera;
-    [this presentViewController:imagePickerCtrl animated:YES completion:nil];
+    self.imagePickerController = [[UIImagePickerController alloc] init];
+    self.imagePickerController.delegate = this;
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [this presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
 - (void)openPhotoAlbumWithDelegate:(__weak id)controller inView:(UIView *)view {
@@ -46,8 +50,10 @@
 }
 
 - (void)openPhoto:(__weak id)this inView:(UIView *)view {
-    UIImagePickerController *imagePickerCtrl = [self imagePicker:this];
-    [self openPickerController:this view:view imagePickerCtrl:imagePickerCtrl];
+    self.imagePickerController = [[UIImagePickerController alloc] init];
+    self.imagePickerController.delegate = this;
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self openPickerController:this view:view imagePickerCtrl:self.imagePickerController];
 }
 
 - (void)openPickerController:(__weak id)this view:(UIView *)view imagePickerCtrl:(UIImagePickerController *)imagePickerCtrl {
@@ -57,13 +63,6 @@
     } else {
         [this presentViewController:imagePickerCtrl animated:YES completion:nil];
     }
-}
-
-- (UIImagePickerController *)imagePicker:(id)this {
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.delegate = this;
-    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    return imagePickerController;
 }
 
 - (void)dismissPickerView:(UIViewController *)this {
