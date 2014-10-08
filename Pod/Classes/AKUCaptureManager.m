@@ -16,7 +16,7 @@
 
 + (void)askForPermission:(void (^)(AVAuthorizationStatus))complete {
     AVAuthorizationStatus status = [self status];
-    if (status == ALAuthorizationStatusNotDetermined) {
+    if (status == AVAuthorizationStatusNotDetermined) {
         __weak typeof(self) this = self;
         [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -37,13 +37,13 @@
         case AVAuthorizationStatusDenied:
             if ([self iosVersionOver8]) {
                 return @"許可ダイアログで\"いいえ\"が押されています\n"
-                        "設定アプリ -> アプリ -> 写真を音にする必要があります。";
+                        "設定アプリ -> アプリ -> カメラをオンにする必要があります。";
             } else {
                 return @"許可ダイアログで\"いいえ\"が押されています\n"
-                        "設定アプリ -> プライバシー -> 写真 -> 該当アプリを\"オン\"する必要があります";
+                        "設定アプリ -> プライバシー -> カメラ -> 該当アプリを\"オン\"する必要があります";
             }
         case AVAuthorizationStatusAuthorized:
-            return @"写真へのアクセスが許可されています";
+            return @"カメラへのアクセスが許可されています";
     }
 }
 @end

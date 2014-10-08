@@ -10,6 +10,7 @@
 #import "CCActionSheet.h"
 #import "AKUAssetManager.h"
 #import "CCAlertView.h"
+#import "AKUCaptureManager.h"
 
 @implementation AKUImagePickerManager {
     UIPopoverController *imagePopController;
@@ -17,8 +18,16 @@
 
 - (void)openCameraWithDelegate:(__weak id)controller {
     __weak typeof(self) this = self;
-    [self askForPermission:^{
-        [this openCamera:controller];
+    [AKUCaptureManager askForPermission:^(AVAuthorizationStatus status) {
+        if (status == AVAuthorizationStatusAuthorized) {
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                [this openCamera:controller];
+            } else {
+                [this openErrorAlertWithString:[AKUCaptureManager stringForStatus:AVAuthorizationStatusRestricted]];
+            }
+        } else {
+            [this openErrorAlertWithString:[AKUCaptureManager stringForStatus:status]];
+        }
     }];
 }
 
@@ -67,14 +76,17 @@
 }
 
 - (void)selectViewToOpen:(__weak id)controller inView:(id)view {
-    [self askForPermission:^{
-        CCActionSheet *sheet = [self createSheet:controller view:view];
-        [sheet showInView:[controller view]];
-    }];
+    CCActionSheet *sheet = [self createSheet:controller view:view];
+    [sheet showInView:[controller view]];
 }
 
-- (void)openErrorAlert:(ALAuthorizationStatus)status {
-    CCAlertView *view = [[CCAlertView alloc] initWithTitle:[AKUAssetManager stringForStatus:status] message:nil];
+- (void)openErrorAlertWithStatus:(ALAuthorizationStatus)status {
+    NSString *title = [AKUAssetManager stringForStatus:status];
+    [self openErrorAlertWithString:title];
+}
+
+- (void)openErrorAlertWithString:(NSString *)title {
+    CCAlertView *view = [[CCAlertView alloc] initWithTitle:title message:nil];
     [view addButtonWithTitle:@"確認" block:^{
     }];
     if ([AKUAssetManager iosVersionOver8]) {
@@ -104,7 +116,7 @@
         if (status == ALAuthorizationStatusAuthorized) {
             complete();
         } else {
-            [this openErrorAlert:status];
+            [this openErrorAlertWithStatus:status];
         }
     }];
 }

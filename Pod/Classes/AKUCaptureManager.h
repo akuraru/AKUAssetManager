@@ -4,10 +4,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVFoundation.h>
 #import "AKUBaseManager.h"
 
 @interface AKUCaptureManager : AKUBaseManager
 
++ (AVAuthorizationStatus)status;
+
++ (void)askForPermission:(void (^)(AVAuthorizationStatus))complete;
+
++ (NSString *)stringForStatus:(AVAuthorizationStatus)status;
 @end
