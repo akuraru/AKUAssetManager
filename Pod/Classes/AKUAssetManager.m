@@ -23,9 +23,13 @@
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
             *stop = YES;
-            complete([ALAssetsLibrary authorizationStatus]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                complete([ALAssetsLibrary authorizationStatus]);
+            });
         } failureBlock:^(NSError *error) {
-            complete([ALAssetsLibrary authorizationStatus]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                complete([ALAssetsLibrary authorizationStatus]);
+            });
         }];
     } else {
         complete(status);

@@ -98,16 +98,14 @@
     return sheet;
 }
 
-- (void)askForPermission:(void(^)())complete {
+- (void)askForPermission:(void (^)())complete {
     __weak typeof(self) this = self;
     [AKUAssetManager askForPermission:^(ALAuthorizationStatus status) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (status == ALAuthorizationStatusAuthorized) {
-                complete();
-            } else {
-                [this openErrorAlert:status];
-            }
-        });
+        if (status == ALAuthorizationStatusAuthorized) {
+            complete();
+        } else {
+            [this openErrorAlert:status];
+        }
     }];
 }
 @end

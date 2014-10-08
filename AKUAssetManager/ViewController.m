@@ -37,9 +37,7 @@
 - (IBAction)askForPermission:(id)sender {
     __weak typeof(self) this = self;
     [AKUAssetManager askForPermission:^(ALAuthorizationStatus status) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [this alert:status];
-        });
+        [this alert:status];
     }];
 }
 
