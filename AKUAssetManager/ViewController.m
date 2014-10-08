@@ -44,7 +44,7 @@
 }
 
 - (IBAction)openCamera:(id)sender {
-    [self.manager openCameraWithDeledate:self];
+    [self.manager openCameraWithDelegate:self];
 }
 
 - (IBAction)openPhoto:(id)sender {

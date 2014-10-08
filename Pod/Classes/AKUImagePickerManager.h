@@ -10,7 +10,7 @@
 
 @interface AKUImagePickerManager : NSObject
 
-- (void)openCameraWithDeledate:(__weak id)controller;
+- (void)openCameraWithDelegate:(__weak id)controller;
 
 - (void)openPhotoAlbumWithDelegate:(__weak id)this inView:(UIView *)view;
 

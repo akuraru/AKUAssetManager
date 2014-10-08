@@ -15,7 +15,7 @@
     UIPopoverController *imagePopController;
 }
 
-- (void)openCameraWithDeledate:(__weak id)controller {
+- (void)openCameraWithDelegate:(__weak id)controller {
     __weak typeof(self) this = self;
     [self askForPermission:^{
         [this openCamera:controller];
@@ -89,7 +89,7 @@
     __weak typeof(self) this = self;
     CCActionSheet *sheet = [[CCActionSheet alloc] initWithTitle:nil];
     [sheet addButtonWithTitle:@"写真を撮影" block:^{
-        [this openCameraWithDeledate:controller];
+        [this openCameraWithDelegate:controller];
     }];
     [sheet addButtonWithTitle:@"写真を選択" block:^{
         [this openPhotoAlbumWithDelegate:controller inView:view];
