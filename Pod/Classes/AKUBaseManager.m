@@ -18,6 +18,6 @@
 }
 
 + (BOOL)iosVersionOver8 {
-    return 8.0 <= [[[UIDevice currentDevice] systemVersion] doubleValue];
+    return NSFoundationVersionNumber_iOS_7_1 < NSFoundationVersionNumber;
 }
 @end
