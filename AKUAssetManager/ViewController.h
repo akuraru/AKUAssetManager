@@ -1,5 +1,5 @@
 //
-//  _ViewController.h
+//  ViewController.h
 //  AKUAssetManager
 //
 //  Created by akuraru on 10/07/2014.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface _ViewController : UIViewController
+@class AKUImagePickerManager;
 
+@interface ViewController : UIViewController
+- (void)updateView;
 @end

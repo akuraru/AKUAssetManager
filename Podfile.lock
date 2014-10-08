@@ -1,0 +1,23 @@
+PODS:
+  - AKUAssetManager (0.1.0):
+    - Lambda-Alert
+  - FBSnapshotTestCase (1.2)
+  - Kiwi (2.3.0)
+  - Lambda-Alert (1.0.1)
+
+DEPENDENCIES:
+  - AKUAssetManager (from `./`)
+  - FBSnapshotTestCase
+  - Kiwi
+
+EXTERNAL SOURCES:
+  AKUAssetManager:
+    :path: ./
+
+SPEC CHECKSUMS:
+  AKUAssetManager: d2af1567a297550fe8d819029412cf8841eeabf0
+  FBSnapshotTestCase: 4159bdf235fdae25aa7d813f1452a4f05ad4f9cd
+  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
+  Lambda-Alert: ba4824adee17127ef43d82d63be8affa536163cc
+
+COCOAPODS: 0.34.1

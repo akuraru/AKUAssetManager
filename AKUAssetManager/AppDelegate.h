@@ -1,5 +1,5 @@
 //
-//  _AppDelegate.h
+//  AppDelegate.h
 //  AKUAssetManager
 //
 //  Created by CocoaPods on 10/07/2014.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface _AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
