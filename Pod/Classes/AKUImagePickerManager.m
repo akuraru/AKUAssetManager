@@ -85,8 +85,8 @@
     [self openErrorAlertWithString:title];
 }
 
-- (void)openErrorAlertWithString:(NSString *)title {
-    CCAlertView *view = [[CCAlertView alloc] initWithTitle:title message:nil];
+- (void)openErrorAlertWithString:(NSString *) message {
+    CCAlertView *view = [[CCAlertView alloc] initWithTitle:@"設定エラー" message:message];
     [view addButtonWithTitle:@"確認" block:^{
     }];
     if ([AKUAssetManager iosVersionOver8]) {
