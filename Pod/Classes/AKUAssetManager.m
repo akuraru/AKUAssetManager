@@ -45,9 +45,10 @@
         case ALAuthorizationStatusRestricted:
             return @"機能制限(ペアレンタルコントロール)で許可されていません";
         case ALAuthorizationStatusDenied: {
-            NSString *appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+            NSString *localAppName = [[NSBundle mainBundle] localizedInfoDictionary] [@"CFBundleDisplayName"];
+            NSString *appName = localAppName ?: [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
             return [NSString stringWithFormat:@"写真へのアクセスが許可されていません。\n"
-                                                  "設定アプリ → プライバシー → 写真 → %@ を許可してください。",
+                                                  "設定 → プライバシー → 写真 → %@ を許可してください。",
                                               appName];
 
         }

@@ -35,9 +35,10 @@
         case AVAuthorizationStatusRestricted:
             return @"機能制限(ペアレンタルコントロール)によりカメラへのアクセスが許可されていません。";
         case AVAuthorizationStatusDenied:{
-            NSString *appName = [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+            NSString *localAppName = [[NSBundle mainBundle] localizedInfoDictionary] [@"CFBundleDisplayName"];
+            NSString *appName = localAppName ?: [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
             return [NSString stringWithFormat:@"カメラへのアクセスが許可されていません。\n"
-                                                  "設定アプリ → プライバシー → カメラ → %@ を許可してください。",
+                                                  "設定 → プライバシー → カメラ → %@ を許可してください。",
                                               appName];
         }
         case AVAuthorizationStatusAuthorized:
