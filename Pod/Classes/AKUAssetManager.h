@@ -7,15 +7,12 @@
 //
 
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "AKUBaseManager.h"
 
-@interface AKUAssetManager : NSObject
+@interface AKUAssetManager : AKUBaseManager
 + (ALAuthorizationStatus)status;
 
 + (void)askForPermission:(void (^)(ALAuthorizationStatus))complete;
 
 + (NSString *)stringForStatus:(ALAuthorizationStatus)status;
-
-+ (void)openSetting NS_AVAILABLE_IOS(8_0);
-
-+ (BOOL)iosVersionOver8;
 @end

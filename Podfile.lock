@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
     :path: ./
 
 SPEC CHECKSUMS:
-  AKUAssetManager: d2af1567a297550fe8d819029412cf8841eeabf0
+  AKUAssetManager: 71c3ee605e4075b8998eb68126946537da451b03
   FBSnapshotTestCase: 4159bdf235fdae25aa7d813f1452a4f05ad4f9cd
   Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
   Lambda-Alert: ba4824adee17127ef43d82d63be8affa536163cc

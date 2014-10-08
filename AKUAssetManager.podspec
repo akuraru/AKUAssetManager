@@ -33,6 +33,6 @@ Pod::Spec.new do |s|
   }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'UIKit', 'MapKit', 'AssetsLibrary'
+  s.frameworks = 'UIKit', 'AssetsLibrary', 'AVFoundation'
   s.dependency 'Lambda-Alert'
 end

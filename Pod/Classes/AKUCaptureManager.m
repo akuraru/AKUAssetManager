@@ -1,50 +1,40 @@
 //
-//  AKUAssetManager.m
-//  AKUAssetManager
-//
-//  Created by akuraru on 10/07/2014.
-//  Copyright (c) 2014 akuraru. All rights reserved.
+// Created by akuraru on 2014/10/08.
+// Copyright (c) 2014 akuraru. All rights reserved.
 //
 
-#import "AKUAssetManager.h"
+#import "AKUCaptureManager.h"
 
-@interface AKUAssetManager ()
+@interface AKUCaptureManager ()
 @end
 
-@implementation AKUAssetManager {
+@implementation AKUCaptureManager {
 }
-+ (ALAuthorizationStatus)status {
-    return [ALAssetsLibrary authorizationStatus];
++ (AVAuthorizationStatus)status {
+    return [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
 }
 
-+ (void)askForPermission:(void (^)(ALAuthorizationStatus))complete {
-    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
++ (void)askForPermission:(void (^)(AVAuthorizationStatus))complete {
+    AVAuthorizationStatus status = [self status];
     if (status == ALAuthorizationStatusNotDetermined) {
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         __weak typeof(self) this = self;
-        void (^f)() = ^{
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 complete([this status]);
             });
-        };
-        [library enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-            *stop = YES;
-            f();
-        } failureBlock:^(NSError *error) {
-            f();
         }];
     } else {
         complete(status);
     }
 }
 
-+ (NSString *)stringForStatus:(ALAuthorizationStatus)status {
++ (NSString *)stringForStatus:(AVAuthorizationStatus)status {
     switch (status) {
-        case ALAuthorizationStatusNotDetermined:
+        case AVAuthorizationStatusNotDetermined:
             return @"まだ許可ダイアログ出たことない";
-        case ALAuthorizationStatusRestricted:
+        case AVAuthorizationStatusRestricted:
             return @"機能制限(ペアレンタルコントロール)で許可されてない";
-        case ALAuthorizationStatusDenied:
+        case AVAuthorizationStatusDenied:
             if ([self iosVersionOver8]) {
                 return @"許可ダイアログで\"いいえ\"が押されています\n"
                         "設定アプリ -> アプリ -> 写真を音にする必要があります。";
@@ -52,7 +42,7 @@
                 return @"許可ダイアログで\"いいえ\"が押されています\n"
                         "設定アプリ -> プライバシー -> 写真 -> 該当アプリを\"オン\"する必要があります";
             }
-        case ALAuthorizationStatusAuthorized:
+        case AVAuthorizationStatusAuthorized:
             return @"写真へのアクセスが許可されています";
     }
 }
