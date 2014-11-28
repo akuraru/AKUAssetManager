@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "AKUAssetManager"
-  s.version          = "0.1.3"
+  s.version          = "0.2.0"
   s.summary          = "Easy to check authorizationStatus of Camera/Photo."
   s.description      = <<-DESC
                        Easy to check authorizationStatus of Camera/Photo.
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/akuraru/AKUAssetManager.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/akuraru'
 
-  s.platform     = :ios, '6.0'
+  s.platform     = :ios, '7.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes'
