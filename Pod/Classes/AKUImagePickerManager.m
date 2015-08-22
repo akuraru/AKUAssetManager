@@ -20,43 +20,43 @@
     UIPopoverController *imagePopController;
 }
 
-- (void)openCameraWithDelegate:(__weak id)controller {
-    __weak typeof(self) this = self;
+- (void)openCameraWithDelegate:(__weak id<AKUImageManagerProtocol>)this {
+    __weak typeof(self) that = self;
     [AKUCaptureManager askForPermission:^(AVAuthorizationStatus status) {
         if (status == AVAuthorizationStatusAuthorized) {
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                [this openCamera:controller];
+                [that openCamera:this];
             } else {
-                [this openErrorAlertWithString:[AKUCaptureManager stringForStatus:AVAuthorizationStatusRestricted]];
+                [that openErrorAlertWithString:[AKUCaptureManager stringForStatus:AVAuthorizationStatusRestricted]];
             }
         } else {
-            [this openErrorAlertWithString:[AKUCaptureManager stringForStatus:status]];
+            [that openErrorAlertWithString:[AKUCaptureManager stringForStatus:status]];
         }
     }];
 }
 
-- (void)openCamera:(__weak id)this {
+- (void)openCamera:(__weak id<AKUImageManagerProtocol>)this {
     self.imagePickerController = [[UIImagePickerController alloc] init];
     self.imagePickerController.delegate = this;
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     [this presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
-- (void)openPhotoAlbumWithDelegate:(__weak id)controller inView:(UIView *)view {
-    __weak typeof(self) this = self;
+- (void)openPhotoAlbumWithDelegate:(__weak id<AKUImageManagerProtocol>)this inView:(UIView *)view {
+    __weak typeof(self) that = self;
     [self askForPermission:^{
-        [this openPhoto:controller inView:view];
+        [that openPhoto:this inView:view];
     }];
 }
 
-- (void)openPhoto:(__weak id)this inView:(UIView *)view {
+- (void)openPhoto:(__weak id<AKUImageManagerProtocol>)this inView:(UIView *)view {
     self.imagePickerController = [[UIImagePickerController alloc] init];
     self.imagePickerController.delegate = this;
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self openPickerController:this view:view imagePickerCtrl:self.imagePickerController];
 }
 
-- (void)openPickerController:(__weak id)this view:(UIView *)view imagePickerCtrl:(UIImagePickerController *)imagePickerCtrl {
+- (void)openPickerController:(__weak id<AKUImageManagerProtocol>)this view:(UIView *)view imagePickerCtrl:(UIImagePickerController *)imagePickerCtrl {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         imagePopController = [[UIPopoverController alloc] initWithContentViewController:imagePickerCtrl];
         [imagePopController presentPopoverFromRect:view.frame inView:view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
@@ -65,7 +65,7 @@
     }
 }
 
-- (void)dismissPickerView:(UIViewController *)this {
+- (void)dismissPickerView:(__weak id<AKUImageManagerProtocol>)this {
     if (imagePopController) {
         [imagePopController dismissPopoverAnimated:YES];
     } else {
@@ -74,7 +74,7 @@
 
 }
 
-- (void)selectViewToOpen:(__weak id)controller inView:(id)view {
+- (void)selectViewToOpen:(__weak id<AKUImageManagerProtocol>)controller inView:(id)view {
     CCActionSheet *sheet = [self createSheet:controller view:view];
     [sheet showInView:[controller view]];
 }
@@ -89,7 +89,7 @@
     [view addButtonWithTitle:@"確認" block:^{
     }];
     if ([AKUAssetManager iosVersionOver8]) {
-        [view addButtonWithTitle:@"設定" block:^{
+        [view addButtonWithTitle:@"設定を開く" block:^{
             [AKUAssetManager openSetting];
         }];
     }

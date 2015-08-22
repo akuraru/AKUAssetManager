@@ -1,4 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
 
 target 'AKUAssetManager', :exclusive => true do
   pod "AKUAssetManager", :path => "./"

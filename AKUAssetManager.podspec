@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "AKUAssetManager"
-  s.version          = "0.2.0"
+  s.version          = "0.2.1"
   s.summary          = "Easy to check authorizationStatus of Camera/Photo."
   s.description      = <<-DESC
                        Easy to check authorizationStatus of Camera/Photo.
