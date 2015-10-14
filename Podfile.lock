@@ -1,13 +1,11 @@
 PODS:
-  - AKUAssetManager (0.2.0):
-    - Lambda-Alert
-  - FBSnapshotTestCase (2.0.3):
-    - FBSnapshotTestCase/SwiftSupport (= 2.0.3)
-  - FBSnapshotTestCase/Core (2.0.3)
-  - FBSnapshotTestCase/SwiftSupport (2.0.3):
+  - AKUAssetManager (0.2.1)
+  - FBSnapshotTestCase (2.0.5):
+    - FBSnapshotTestCase/SwiftSupport (= 2.0.5)
+  - FBSnapshotTestCase/Core (2.0.5)
+  - FBSnapshotTestCase/SwiftSupport (2.0.5):
     - FBSnapshotTestCase/Core
   - Kiwi (2.4.0)
-  - Lambda-Alert (1.0.1)
 
 DEPENDENCIES:
   - AKUAssetManager (from `./`)
@@ -16,12 +14,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   AKUAssetManager:
-    :path: ./
+    :path: "./"
 
 SPEC CHECKSUMS:
-  AKUAssetManager: 24b0af39a159a69a153e3177dcff6db10248c41e
-  FBSnapshotTestCase: d0eeca6bf87958e088b254396ae66873f971cfb1
+  AKUAssetManager: a9eb63ef42ca7286210a55cf2712e80370b92888
+  FBSnapshotTestCase: 6917deb01d0556dd544536f9eb34e0cf26f904d5
   Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
-  Lambda-Alert: dadd1e0c1d6a63f8c8300f7aad9f263101c1ccba
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0.beta.5

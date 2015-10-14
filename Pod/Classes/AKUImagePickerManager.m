@@ -6,10 +6,9 @@
 //  Copyright (c) 2013年 P.I.akura. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "AKUImagePickerManager.h"
-#import "CCActionSheet.h"
 #import "AKUAssetManager.h"
-#import "CCAlertView.h"
 #import "AKUCaptureManager.h"
 
 @interface AKUImagePickerManager ()
@@ -20,49 +19,50 @@
     UIPopoverController *imagePopController;
 }
 
-- (void)openCameraWithDelegate:(__weak id<AKUImageManagerProtocol>)this {
+- (void)openCameraWithDelegate:(__weak id<AKUImageManagerProtocol>)this item:(UIBarButtonItem *)item view:(UIView *)view {
     __weak typeof(self) that = self;
     [AKUCaptureManager askForPermission:^(AVAuthorizationStatus status) {
         if (status == AVAuthorizationStatusAuthorized) {
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                [that openCamera:this];
+                [that openCamera:this item:item view:view];
             } else {
-                [that openErrorAlertWithString:[AKUCaptureManager stringForStatus:AVAuthorizationStatusRestricted]];
+                [that openErrorAlertWithString:[AKUCaptureManager stringForStatus:AVAuthorizationStatusRestricted] controller:this];
             }
         } else {
-            [that openErrorAlertWithString:[AKUCaptureManager stringForStatus:status]];
+            [that openErrorAlertWithString:[AKUCaptureManager stringForStatus:status] controller:this];
         }
     }];
 }
 
-- (void)openCamera:(__weak id<AKUImageManagerProtocol>)this {
+- (void)openCamera:(__weak id<AKUImageManagerProtocol>)this item:(UIBarButtonItem *)item view:(UIView *)view {
     self.imagePickerController = [[UIImagePickerController alloc] init];
     self.imagePickerController.delegate = this;
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+
+    self.imagePickerController.popoverPresentationController.barButtonItem = item;
+    self.imagePickerController.popoverPresentationController.sourceView = view;
+    self.imagePickerController.popoverPresentationController.sourceRect = view.bounds;
+
     [this presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
-- (void)openPhotoAlbumWithDelegate:(__weak id<AKUImageManagerProtocol>)this inView:(UIView *)view {
+- (void)openPhotoAlbumWithDelegate:(__weak id<AKUImageManagerProtocol>)this item:(UIBarButtonItem *)item view:(UIView *)view {
     __weak typeof(self) that = self;
     [self askForPermission:^{
-        [that openPhoto:this inView:view];
+        [that openPhoto:this item:item view:view];
     }];
 }
 
-- (void)openPhoto:(__weak id<AKUImageManagerProtocol>)this inView:(UIView *)view {
+- (void)openPhoto:(__weak id<AKUImageManagerProtocol>)this item:(UIBarButtonItem *)item view:(UIView *)view {
     self.imagePickerController = [[UIImagePickerController alloc] init];
     self.imagePickerController.delegate = this;
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    [self openPickerController:this view:view imagePickerCtrl:self.imagePickerController];
-}
 
-- (void)openPickerController:(__weak id<AKUImageManagerProtocol>)this view:(UIView *)view imagePickerCtrl:(UIImagePickerController *)imagePickerCtrl {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        imagePopController = [[UIPopoverController alloc] initWithContentViewController:imagePickerCtrl];
-        [imagePopController presentPopoverFromRect:view.frame inView:view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    } else {
-        [this presentViewController:imagePickerCtrl animated:YES completion:nil];
-    }
+    self.imagePickerController.popoverPresentationController.barButtonItem = item;
+    self.imagePickerController.popoverPresentationController.sourceView = view;
+    self.imagePickerController.popoverPresentationController.sourceRect = view.bounds;
+
+    [this presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
 - (void)dismissPickerView:(__weak id<AKUImageManagerProtocol>)this {
@@ -74,41 +74,38 @@
 
 }
 
-- (void)selectViewToOpen:(__weak id<AKUImageManagerProtocol>)controller inView:(id)view {
-    CCActionSheet *sheet = [self createSheet:controller view:view];
-    [sheet showInView:[controller view]];
+- (void)selectViewToOpen:(__weak id<AKUImageManagerProtocol>)controller item:(UIBarButtonItem *)item view:(UIView *)view {
+    __weak typeof(self) this = self;
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [alertController addAction:[UIAlertAction actionWithTitle:@"写真を撮影" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [this openCameraWithDelegate:controller item:item view:view];
+        }]];
+    }
+    [alertController addAction:[UIAlertAction actionWithTitle:@"写真を選択" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [this openPhotoAlbumWithDelegate:controller item:item view:view];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"キャンセル" style:UIAlertActionStyleCancel handler:nil]];
+
+    alertController.popoverPresentationController.barButtonItem = item;
+    alertController.popoverPresentationController.sourceView = view;
+    alertController.popoverPresentationController.sourceRect = view.bounds;
+
+    [controller presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)openErrorAlertWithStatus:(ALAuthorizationStatus)status {
     NSString *title = [AKUAssetManager stringForStatus:status];
-    [self openErrorAlertWithString:title];
+    [self openErrorAlertWithString:title controller:nil];
 }
 
-- (void)openErrorAlertWithString:(NSString *) message {
-    CCAlertView *view = [[CCAlertView alloc] initWithTitle:@"設定エラー" message:message];
-    [view addButtonWithTitle:@"確認" block:^{
-    }];
-    if ([AKUAssetManager iosVersionOver8]) {
-        [view addButtonWithTitle:@"設定を開く" block:^{
-            [AKUAssetManager openSetting];
-        }];
-    }
-    [view show];
-}
-
-- (CCActionSheet *)createSheet:(__weak id)controller view:(id)view {
-    __weak typeof(self) this = self;
-    CCActionSheet *sheet = [[CCActionSheet alloc] initWithTitle:nil];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        [sheet addButtonWithTitle:@"写真を撮影" block:^{
-            [this openCameraWithDelegate:controller];
-        }];
-    }
-    [sheet addButtonWithTitle:@"写真を選択" block:^{
-        [this openPhotoAlbumWithDelegate:controller inView:view];
-    }];
-    [sheet addCancelButtonWithTitle:@"キャンセル"];
-    return sheet;
+- (void)openErrorAlertWithString:(NSString *)message controller:(__weak id <AKUImageManagerProtocol>)controller {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"設定エラー" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"確認" style:UIAlertActionStyleDefault handler:nil]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"設定を開く" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [AKUAssetManager openSetting];
+    }]];
+    [controller presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)askForPermission:(void (^)())complete {

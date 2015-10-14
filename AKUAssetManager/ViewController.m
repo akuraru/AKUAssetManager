@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 akuraru. All rights reserved.
 //
 
+#import <AKUAssetManager/AKUImagePickerManager.h>
+#import <AKUAssetManager/AKUAssetManager.h>
 #import "ViewController.h"
 #import "AKUAssetManager.h"
 #import "AKUImagePickerManager.h"
 
-@interface ViewController ()
+@interface ViewController () <AKUImageManagerProtocol>
 @property(weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property(nonatomic, strong) AKUImagePickerManager *manager;
 @end
@@ -42,15 +44,15 @@
 }
 
 - (IBAction)openCamera:(id)sender {
-    [self.manager openCameraWithDelegate:self];
+    [self.manager openCameraWithDelegate:self item:nil view:sender];
 }
 
 - (IBAction)openPhoto:(id)sender {
-    [self.manager openPhotoAlbumWithDelegate:self inView:sender];
+    [self.manager openPhotoAlbumWithDelegate:self item:nil view:sender];
 }
 
 - (IBAction)chooseAsset:(id)sender {
-    [self.manager selectViewToOpen:self inView:sender];
+    [self.manager selectViewToOpen:self item:nil view:sender];
 }
 
 - (void)alert:(ALAuthorizationStatus)status {
